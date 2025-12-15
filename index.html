@@ -2,104 +2,376 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>G-Farma Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>G-Farma Cotações</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary-yellow: #FFD700;
+            --primary-black: #111;
+            --accent-white: #fff;
+            --gray-light: #f4f4f4;
+            --success: #28a745;
+            --danger: #dc3545;
+            --whatsapp: #25D366;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--gray-light);
+            margin: 0;
+            padding: 0;
+            padding-bottom: 100px; /* Espaço para o footer e nav */
+            color: var(--primary-black);
+        }
+
+        header {
+            background-color: var(--primary-yellow);
+            color: var(--primary-black);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        header h1 { margin: 0; font-size: 1.5rem; text-transform: uppercase; }
+        header p { margin: 5px 0 0; font-size: 0.9rem; opacity: 0.8; }
+
+        /* NAVEGAÇÃO RESPONSIVA */
+        nav {
+            background: var(--primary-black);
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+        }
+        
+        nav button {
+            background: none;
+            border: none;
+            color: var(--accent-white);
+            padding: 10px 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: 0.3s;
+        }
+        
+        nav button.active {
+            color: var(--primary-yellow);
+            border-bottom: 3px solid var(--primary-yellow);
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            nav {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                justify-content: space-around;
+                padding: 15px 0;
+                z-index: 1000;
+                box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+            }
+            nav button {
+                font-size: 0.85rem;
+                padding: 5px;
+                border-bottom: none;
+            }
+            nav button.active {
+                color: var(--primary-yellow);
+                border-bottom: none;
+            }
+        }
+
+        /* LAYOUT */
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: var(--accent-white);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: none;
+        }
+        .container.active { display: block; }
+
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 1rem;
+        }
+        
+        button.btn-block {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            color: white;
+            margin-top: 10px;
+            font-size: 1rem;
+        }
+
+        .btn-primary { background-color: var(--primary-black); color: var(--primary-yellow); }
+        .btn-danger { background-color: var(--danger); font-size: 0.8rem; }
+        
+        .btn-whatsapp { 
+            background-color: var(--whatsapp); 
+            display: block; 
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            padding: 12px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        /* CARDS */
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #fff;
+            border-left: 6px solid var(--primary-yellow);
+        }
+        .card h3 { margin: 0; color: var(--primary-black); }
+        .price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+        .best-price { color: var(--primary-black); font-weight: bold; font-size: 1.4rem; }
+        .savings-badge {
+            background-color: #d4edda; color: #155724; padding: 4px 8px;
+            border-radius: 12px; font-size: 0.8rem; font-weight: bold;
+        }
+
+        /* FOOTER */
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 20px;
+        }
+        footer a { color: var(--primary-black); text-decoration: none; font-weight: bold; }
+
+        #loader { text-align: center; display: none; margin-top: 20px; }
+    </style>
 </head>
 <body>
+
     <header>
-      <img src="gfarma.png" alt="Logo G-Farma" class="logo">
-      <h1>G-Farma Cotações</h1>
-      <p>Painel Administrativo</p>
+        <h1>G-Farma</h1>
+        <p>Gestão de Compras Inteligente</p>
     </header>
 
-    <nav>
-      <button onclick="showTab('tab-cadastro')" class="active">Cadastros</button>
-      <button onclick="showTab('tab-lancar')">Lançar Manual</button>
-      <button onclick="showTab('tab-link')">Gerar Link</button>
-      <button onclick="showTab('tab-analise')">Melhores Preços</button>
-      <button onclick="showTab('tab-historico')">Histórico</button>
-    </nav>
-
     <div id="tab-cadastro" class="container active">
-      <h2>Cadastrar Item</h2>
-      <div class="form-group">
-        <label>Nome do Medicamento</label>
-        <input type="text" id="prodNome" placeholder="Ex: Dipirona 500mg">
-      </div>
-      <div class="form-group">
-        <label>Unidade</label>
-        <select id="prodUnidade">
-          <option value="CX">Caixa</option>
-          <option value="UN">Unidade</option>
-          <option value="FR">Frasco</option>
-        </select>
-      </div>
-      <button class="btn-save" onclick="salvarProduto()">Salvar Produto</button>
-      <hr style="margin: 30px 0; border-top: 1px dashed #ccc;">
-      <h2>Cadastrar Fornecedor</h2>
-      <div class="form-group">
-        <label>Nome da Empresa</label>
-        <input type="text" id="fornNome" placeholder="Ex: Eurofarma Distribuidora">
-      </div>
-      <div class="form-group">
-        <label>Contato (Tel/Email)</label>
-        <input type="text" id="fornContato">
-      </div>
-      <button class="btn-save" onclick="salvarFornecedor()">Salvar Fornecedor</button>
+        <h2>Cadastros</h2>
+        
+        <div class="form-group">
+            <label>Novo Produto</label>
+            <input type="text" id="prodNome" placeholder="Ex: Dipirona">
+            <select id="prodUnidade" style="margin-top:5px;">
+                <option value="CX">Caixa</option>
+                <option value="UN">Unidade</option>
+                <option value="FR">Frasco</option>
+            </select>
+            <button class="btn-block btn-primary" onclick="enviarDados('salvarProduto')">Salvar Produto</button>
+        </div>
+        
+        <hr style="border-top: 1px dashed #ccc; margin: 20px 0;">
+        
+        <div class="form-group">
+            <label>Novo Fornecedor</label>
+            <input type="text" id="fornNome" placeholder="Ex: Distribuidora A">
+            <input type="tel" id="fornContato" placeholder="DDD + Whatsapp (Ex: 84999998888)" style="margin-top:5px;">
+            <button class="btn-block btn-primary" onclick="enviarDados('salvarFornecedor')">Salvar Fornecedor</button>
+        </div>
     </div>
 
     <div id="tab-lancar" class="container">
-      <h2>Lançar Cotação Manual</h2>
-      <div class="form-group"><label>Produto</label><select id="selectProduto"></select></div>
-      <div class="form-group"><label>Fornecedor</label><select id="selectFornecedor"></select></div>
-      <div class="form-group"><label>Preço (R$)</label><input type="number" id="precoInput" step="0.01"></div>
-      <button class="btn-save" onclick="salvarCotacao()">Registrar Preço</button>
-    </div>
-
-    <div id="tab-link" class="container">
-      <h2>Solicitar ao Fornecedor</h2>
-      <p style="font-size:0.9rem">Gere um link para o fornecedor preencher.</p>
-      <div class="form-group"><label>Fornecedor</label><select id="selFornLink"></select></div>
-      <div class="form-group">
-        <label>Produtos (Segure CTRL p/ selecionar vários)</label>
-        <select id="selProdLink" multiple style="height: 150px;"></select>
-      </div>
-      <button class="btn-save" onclick="gerarLinkZap()" style="background-color: #25D366; color: white;">Gerar Link</button>
-      
-      <div id="areaResultadoLink" style="display:none; margin-top:20px; border-top:1px solid #eee; padding-top:15px;">
-          <p style="font-size:0.9rem; margin-bottom:5px;">Link gerado:</p>
-          <div id="textoLink" style="word-break: break-all; color: #007bff; font-size: 0.85rem; background: #f0f8ff; padding: 10px; border-radius: 5px; margin-bottom: 10px;"></div>
-          <button id="btnZap" class="btn-save" style="background-color: #25D366; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px;">
-             Enviar via WhatsApp
-          </button>
-      </div>
+        <h2>Lançar Preços</h2>
+        
+        <div class="form-group">
+            <label>Produto</label>
+            <select id="selectProduto"><option>Carregando...</option></select>
+        </div>
+        
+        <div class="form-group">
+            <label>Fornecedor</label>
+            <select id="selectFornecedor"><option>Carregando...</option></select>
+        </div>
+        
+        <div class="form-group">
+            <label>Preço (R$)</label>
+            <input type="number" id="precoInput" step="0.01" inputmode="decimal" placeholder="0.00">
+        </div>
+        
+        <button class="btn-block btn-primary" onclick="enviarDados('salvarCotacao')">Registrar</button>
     </div>
 
     <div id="tab-analise" class="container">
-      <h2>Melhores Preços (Resumo)</h2>
-      <button class="btn-save" style="background: var(--success); color: white;" onclick="carregarRelatorio()">Atualizar</button>
-      <div id="loader">Carregando dados...</div>
-      <div id="listaResultados" style="margin-top: 20px;"></div>
+        <h2>Melhores Preços</h2>
+        <button class="btn-block" style="background:var(--success)" onclick="carregarRelatorio()"> Atualizar Relatório</button>
+        
+        <div id="loader">Buscando dados no servidor...</div>
+        <div id="listaResultados" style="margin-top: 20px;"></div>
+
+        <hr style="margin-top: 40px;">
+        <h3>Gestão da Semana</h3>
+        <button class="btn-block btn-danger" onclick="limparTudo()">🗑️ Limpar Cotações da Semana</button>
     </div>
 
-    <div id="tab-historico" class="container">
-      <h2>Histórico de Cotações</h2>
-      <p style="font-size:0.9rem">Veja todos os valores enviados.</p>
-      
-      <div class="form-group" style="display:flex; gap:10px;">
-          <select id="filtroFornecedor">
-              <option value="">Todos os Fornecedores</option>
-          </select>
-          <button onclick="carregarHistorico()" style="padding:10px; background:#111; color:#fff; border:none; border-radius:4px; cursor:pointer;">Filtrar</button>
-      </div>
+    <footer>
+        <p>Desenvolvido por <a href="https://willappsoficial-glitch.github.io/gfarma/" target="_blank">Williano Costa</a></p>
+        <p>Suporte: willianocosta.cover@gmail.com</p>
+        <p>&copy; 2025 WillWeb Soluções Tecnológicas</p>
+    </footer>
 
-      <div id="listaHistorico" style="margin-top: 20px;">
-          <p style="text-align:center; color:#666;">Clique em Filtrar para carregar.</p>
-      </div>
-    </div>
+    <nav>
+        <button onclick="showTab('tab-cadastro')" class="active">📝 Cadastros</button>
+        <button onclick="showTab('tab-lancar')">💲 Lançar</button>
+        <button onclick="showTab('tab-analise')">🏆 Resultado</button>
+    </nav>
 
-    <script src="script.js"></script>
+    <script>
+        // --- CONFIGURAÇÃO DA API ---
+        const API_URL = "https://script.google.com/macros/s/AKfycbzfHTTirqSnT7iZvJzKOw2n8Jwd6Z0q0QEp9s_HM0xcfI23SGIBU-aO_BCQxeYVc5KJiA/exec";
+
+        // --- FUNÇÃO CENTRAL DE CONEXÃO (FETCH) ---
+        async function apiCall(action, payload = {}) {
+            payload.action = action;
+            try {
+                // Usamos 'no-cors' para enviar dados sem erro, mas para RECEBER precisamos que o Apps Script retorne JSONP ou texto puro.
+                // Abaixo usamos o método padrão POST que exige que o script tenha CORS habilitado ou redirecionamento.
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+                return await response.json();
+            } catch (error) {
+                console.error("Erro na API:", error);
+                alert("Erro de conexão. Verifique se o Script foi implantado como 'Qualquer Pessoa'.");
+                return null;
+            }
+        }
+
+        // --- INTERFACE ---
+        function showTab(tabId) {
+            document.querySelectorAll('.container').forEach(div => div.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+            
+            if(tabId === 'tab-lancar') carregarDropdowns();
+            window.scrollTo(0,0);
+        }
+
+        async function enviarDados(tipo) {
+            let dados = {};
+            
+            if (tipo === 'salvarProduto') {
+                dados.nome = document.getElementById('prodNome').value;
+                dados.uni = document.getElementById('prodUnidade').value;
+                if(!dados.nome) return alert("Preencha o nome!");
+                document.getElementById('prodNome').value = '';
+            
+            } else if (tipo === 'salvarFornecedor') {
+                dados.nome = document.getElementById('fornNome').value;
+                dados.contato = document.getElementById('fornContato').value;
+                if(!dados.nome) return alert("Preencha o nome!");
+                document.getElementById('fornNome').value = '';
+
+            } else if (tipo === 'salvarCotacao') {
+                dados.produto = document.getElementById('selectProduto').value;
+                dados.fornecedor = document.getElementById('selectFornecedor').value;
+                dados.preco = document.getElementById('precoInput').value;
+                if(!dados.preco) return alert("Digite o preço!");
+                document.getElementById('precoInput').value = '';
+            }
+
+            const btn = event.target;
+            const textoOriginal = btn.innerText;
+            btn.innerText = "Salvando...";
+            btn.disabled = true;
+
+            const res = await apiCall(tipo, dados);
+            if(res && res.status === 'sucesso') {
+                alert(res.msg);
+            }
+
+            btn.innerText = textoOriginal;
+            btn.disabled = false;
+        }
+
+        async function carregarDropdowns() {
+            const selProd = document.getElementById('selectProduto');
+            const selForn = document.getElementById('selectFornecedor');
+            
+            const res = await apiCall('getDados');
+            if(res) {
+                selProd.innerHTML = res.produtos.length ? res.produtos.map(p => `<option>${p}</option>`).join('') : '<option>Sem produtos</option>';
+                selForn.innerHTML = res.fornecedores.length ? res.fornecedores.map(f => `<option>${f}</option>`).join('') : '<option>Sem fornecedores</option>';
+            }
+        }
+
+        async function carregarRelatorio() {
+            document.getElementById('loader').style.display = 'block';
+            document.getElementById('listaResultados').innerHTML = '';
+            
+            const data = await apiCall('getRelatorio');
+            document.getElementById('loader').style.display = 'none';
+
+            let html = '';
+            if(!data || data.length === 0) {
+                html = '<p style="text-align:center; color:#666;">Nenhum dado encontrado.</p>';
+            } else {
+                data.forEach(item => {
+                    let economiaTag = item.economia > 0 ? `<span class="savings-badge">Economia: R$ ${item.economia.toFixed(2)}</span>` : '';
+                    
+                    let zapButton = '';
+                    if(item.contato) {
+                        let cleanPhone = item.contato.toString().replace(/\D/g, '');
+                        let msg = `Olá, gostaria de pedir *${item.produto}* pelo valor de R$ ${item.melhorPreco.toFixed(2)}.`;
+                        let link = `https://wa.me/55${cleanPhone}?text=${encodeURIComponent(msg)}`;
+                        zapButton = `<a href="${link}" target="_blank" class="btn-whatsapp">📱 Pedir no WhatsApp</a>`;
+                    } else {
+                        zapButton = `<div style="text-align:center; font-size:0.8rem; color:#999; margin-top:5px;">(Sem telefone cadastrado)</div>`;
+                    }
+
+                    html += `
+                        <div class="card">
+                            <h3>${item.produto}</h3>
+                            <div style="font-size:0.9rem; color:#555;">Vencedor: <strong>${item.melhorFornecedor}</strong></div>
+                            <div class="price-row">
+                                <div class="best-price">R$ ${item.melhorPreco.toFixed(2)}</div>
+                                ${economiaTag}
+                            </div>
+                            ${zapButton}
+                        </div>
+                    `;
+                });
+            }
+            document.getElementById('listaResultados').innerHTML = html;
+        }
+
+        async function limparTudo() {
+            if(confirm("Tem certeza? Isso apagará todos os preços lançados esta semana.")) {
+                const res = await apiCall('limparTudo');
+                if(res) {
+                    alert(res.msg);
+                    document.getElementById('listaResultados').innerHTML = '';
+                }
+            }
+        }
+    </script>
 </body>
 </html>
