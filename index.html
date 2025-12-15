@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>G-Farma Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+      <h1>G-Farma Cotações</h1>
+      <p>Painel Administrativo</p>
+    </header>
+
+    <nav>
+      <button onclick="showTab('tab-cadastro')" class="active">Cadastros</button>
+      <button onclick="showTab('tab-lancar')">Lançar Manual</button>
+      <button onclick="showTab('tab-link')">Gerar Link</button>
+      <button onclick="showTab('tab-analise')">Melhores Preços</button>
+      <button onclick="showTab('tab-historico')">Histórico</button>
+    </nav>
+
+    <div id="tab-cadastro" class="container active">
+      <h2>Cadastrar Item</h2>
+      <div class="form-group">
+        <label>Nome do Medicamento</label>
+        <input type="text" id="prodNome" placeholder="Ex: Dipirona 500mg">
+      </div>
+      <div class="form-group">
+        <label>Unidade</label>
+        <select id="prodUnidade">
+          <option value="CX">Caixa</option>
+          <option value="UN">Unidade</option>
+          <option value="FR">Frasco</option>
+        </select>
+      </div>
+      <button class="btn-save" onclick="salvarProduto()">Salvar Produto</button>
+      <hr style="margin: 30px 0; border-top: 1px dashed #ccc;">
+      <h2>Cadastrar Fornecedor</h2>
+      <div class="form-group">
+        <label>Nome da Empresa</label>
+        <input type="text" id="fornNome" placeholder="Ex: Eurofarma Distribuidora">
+      </div>
+      <div class="form-group">
+        <label>Contato (Tel/Email)</label>
+        <input type="text" id="fornContato">
+      </div>
+      <button class="btn-save" onclick="salvarFornecedor()">Salvar Fornecedor</button>
+    </div>
+
+    <div id="tab-lancar" class="container">
+      <h2>Lançar Cotação Manual</h2>
+      <div class="form-group"><label>Produto</label><select id="selectProduto"></select></div>
+      <div class="form-group"><label>Fornecedor</label><select id="selectFornecedor"></select></div>
+      <div class="form-group"><label>Preço (R$)</label><input type="number" id="precoInput" step="0.01"></div>
+      <button class="btn-save" onclick="salvarCotacao()">Registrar Preço</button>
+    </div>
+
+    <div id="tab-link" class="container">
+      <h2>Solicitar ao Fornecedor</h2>
+      <p style="font-size:0.9rem">Gere um link para o fornecedor preencher.</p>
+      <div class="form-group"><label>Fornecedor</label><select id="selFornLink"></select></div>
+      <div class="form-group">
+        <label>Produtos (Segure CTRL p/ selecionar vários)</label>
+        <select id="selProdLink" multiple style="height: 150px;"></select>
+      </div>
+      <button class="btn-save" onclick="gerarLinkZap()" style="background-color: #25D366; color: white;">Gerar Link</button>
+      
+      <div id="areaResultadoLink" style="display:none; margin-top:20px; border-top:1px solid #eee; padding-top:15px;">
+          <p style="font-size:0.9rem; margin-bottom:5px;">Link gerado:</p>
+          <div id="textoLink" style="word-break: break-all; color: #007bff; font-size: 0.85rem; background: #f0f8ff; padding: 10px; border-radius: 5px; margin-bottom: 10px;"></div>
+          <button id="btnZap" class="btn-save" style="background-color: #25D366; color: #fff; display: flex; align-items: center; justify-content: center; gap: 10px;">
+             Enviar via WhatsApp
+          </button>
+      </div>
+    </div>
+
+    <div id="tab-analise" class="container">
+      <h2>Melhores Preços (Resumo)</h2>
+      <button class="btn-save" style="background: var(--success); color: white;" onclick="carregarRelatorio()">Atualizar</button>
+      <div id="loader">Carregando dados...</div>
+      <div id="listaResultados" style="margin-top: 20px;"></div>
+    </div>
+
+    <div id="tab-historico" class="container">
+      <h2>Histórico de Cotações</h2>
+      <p style="font-size:0.9rem">Veja todos os valores enviados.</p>
+      
+      <div class="form-group" style="display:flex; gap:10px;">
+          <select id="filtroFornecedor">
+              <option value="">Todos os Fornecedores</option>
+          </select>
+          <button onclick="carregarHistorico()" style="padding:10px; background:#111; color:#fff; border:none; border-radius:4px; cursor:pointer;">Filtrar</button>
+      </div>
+
+      <div id="listaHistorico" style="margin-top: 20px;">
+          <p style="text-align:center; color:#666;">Clique em Filtrar para carregar.</p>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotação G-Farma</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Solicitação de Preço</h1>
+    </header>
+
+    <div class="container active" style="display:block;">
+        <div class="info-box">
+            Olá, <strong><span id="nomeFornecedor">Parceiro</span></strong>!<br>
+            Por favor, preencha os valores para os itens abaixo.
+        </div>
+
+        <form id="formCotacao">
+            <div id="listaProdutos">
+                <p style="text-align:center">Carregando itens...</p>
+            </div>
+            <button type="button" class="btn-save" onclick="enviarCotacao()" id="btnEnviar">ENVIAR COTACÃO</button>
+        </form>
+    </div>
+
+    <script>
+        // --- CONFIGURAÇÃO ---
+        const API_URL = "https://script.google.com/macros/s/AKfycbzfHTTirqSnT7iZvJzKOw2n8Jwd6Z0q0QEp9s_HM0xcfI23SGIBU-aO_BCQxeYVc5KJiA/exec";
+
+        const params = new URLSearchParams(window.location.search);
+        const fornecedor = params.get('forn');
+        const ids = params.get('ids');
+
+        if(fornecedor) document.getElementById('nomeFornecedor').innerText = fornecedor;
+
+        window.onload = async function() {
+            if(!ids || !fornecedor) {
+                document.body.innerHTML = "<h3 style='text-align:center; margin-top:50px'>Link inválido.</h3>";
+                return;
+            }
+            try {
+                const response = await fetch(`${API_URL}?action=getProdutosPorIds&ids=${ids}`);
+                const produtos = await response.json();
+                const divLista = document.getElementById('listaProdutos');
+                divLista.innerHTML = ''; 
+
+                produtos.forEach(p => {
+                    divLista.innerHTML += `
+                        <div class="item-row">
+                            <div class="prod-name">${p.nome} (${p.unidade})</div>
+                            <input type="number" step="0.01" class="input-preco" data-nome="${p.nome}" placeholder="R$ 0,00">
+                        </div>`;
+                });
+            } catch (err) { alert("Erro ao carregar produtos."); }
+        };
+
+        async function enviarCotacao() {
+            const inputs = document.querySelectorAll('.input-preco');
+            let respostas = [];
+            inputs.forEach(input => {
+                if(input.value) respostas.push({ produto: input.dataset.nome, preco: parseFloat(input.value) });
+            });
+
+            if(respostas.length === 0) return alert("Preencha pelo menos um valor!");
+
+            const btn = document.getElementById('btnEnviar');
+            btn.innerText = "Enviando..."; btn.disabled = true;
+
+            try {
+                await fetch(`${API_URL}?action=salvarLoteCotacao`, {
+                    method: 'POST', mode: 'cors',
+                    body: JSON.stringify({ fornecedor: fornecedor, respostas: respostas })
+                });
+                document.querySelector('.container').innerHTML = "<h2 style='text-align:center'>Obrigado!<br>Preços enviados com sucesso.</h2>";
+            } catch (error) {
+                alert("Erro ao enviar."); btn.innerText = "TENTAR NOVAMENTE"; btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
