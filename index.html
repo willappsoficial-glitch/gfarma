@@ -1,94 +1,84 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>G-Farma Cotações</title>
+<html>
+  <head>
+    <base target="_top">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    
+    <?!= include('CSS'); ?>
+  </head>
+  <body>
 
     <header>
-        <h1>G-Farma</h1>
-        <p>Gestão de Compras Inteligente</p>
+      <h1>G-Farma Cotações</h1>
+      <p>Sistema Inteligente de Compras</p>
     </header>
 
-    <div id="tab-cadastro" class="container active">
-        <h2>Cadastros</h2>
-        
-        <div class="form-group">
-            <label>Novo Produto</label>
-            <input type="text" id="prodNome" placeholder="Ex: Dipirona">
-            <select id="prodUnidade" style="margin-top:5px;">
-                <option value="CX">Caixa</option>
-                <option value="UN">Unidade</option>
-                <option value="FR">Frasco</option>
-            </select>
-            <button class="btn-block btn-primary" onclick="enviarDados('salvarProduto')">Salvar Produto</button>
-        </div>
+    <nav>
+      <button onclick="showTab('tab-cadastro')" class="active">Cadastros</button>
+      <button onclick="showTab('tab-lancar')">Lançar Preços</button>
+      <button onclick="showTab('tab-analise')">Melhores Preços</button>
+    </nav>
 
-        <div style="background: #eef; padding: 15px; border-radius: 8px; margin: 20px 0; border: 1px solid #ccd;">
-            <label style="color: #333;">📋 Cotação da Semana</label>
-            <p style="font-size: 0.85rem; margin-bottom: 10px; color: #666;">Envie a lista de todos os produtos cadastrados para seus fornecedores preencherem.</p>
-            <button class="btn-block btn-info" onclick="gerarTextoCotacao()">📤 Enviar Lista no WhatsApp</button>
-        </div>
-        
-        <hr style="border-top: 1px dashed #ccc; margin: 20px 0;">
-        
-        <div class="form-group">
-            <label>Novo Fornecedor</label>
-            <input type="text" id="fornNome" placeholder="Ex: Distribuidora A">
-            <input type="tel" id="fornContato" placeholder="DDD + Whatsapp (Ex: 84999998888)" style="margin-top:5px;">
-            <button class="btn-block btn-primary" onclick="enviarDados('salvarFornecedor')">Salvar Fornecedor</button>
-        </div>
+    <div id="tab-cadastro" class="container active">
+      <h2>Novo Produto</h2>
+      <div class="form-group">
+        <label>Nome do Medicamento</label>
+        <input type="text" id="prodNome" placeholder="Ex: Dipirona 500mg">
+      </div>
+      <div class="form-group">
+        <label>Unidade</label>
+        <select id="prodUnidade">
+          <option value="CX">Caixa</option>
+          <option value="UN">Unidade</option>
+          <option value="FR">Frasco</option>
+        </select>
+      </div>
+      <button class="btn-save" onclick="salvarProduto()">Salvar Produto</button>
+      
+      <hr style="margin: 30px 0; border-top: 1px dashed #ccc;">
+      
+      <h2>Novo Fornecedor</h2>
+      <div class="form-group">
+        <label>Nome do Fornecedor</label>
+        <input type="text" id="fornNome" placeholder="Ex: Eurofarma Distribuidora">
+      </div>
+      <div class="form-group">
+        <label>Contato (Tel/Email)</label>
+        <input type="text" id="fornContato">
+      </div>
+      <button class="btn-save" onclick="salvarFornecedor()">Salvar Fornecedor</button>
     </div>
 
     <div id="tab-lancar" class="container">
-        <h2>Lançar Preços</h2>
-        
-        <div class="form-group">
-            <label>Produto</label>
-            <select id="selectProduto"><option>Carregando...</option></select>
-        </div>
-        
-        <div class="form-group">
-            <label>Fornecedor</label>
-            <select id="selectFornecedor"><option>Carregando...</option></select>
-        </div>
-        
-        <div class="form-group">
-            <label>Preço (R$)</label>
-            <input type="number" id="precoInput" step="0.01" inputmode="decimal" placeholder="0.00">
-        </div>
-        
-        <button class="btn-block btn-primary" onclick="enviarDados('salvarCotacao')">Registrar</button>
+      <h2>Lançar Cotação</h2>
+      <p style="font-size:0.8rem; color: #666;">Selecione o produto e o fornecedor que enviou a lista.</p>
+      
+      <div class="form-group">
+        <label>Produto</label>
+        <select id="selectProduto"></select>
+      </div>
+      
+      <div class="form-group">
+        <label>Fornecedor</label>
+        <select id="selectFornecedor"></select>
+      </div>
+      
+      <div class="form-group">
+        <label>Preço Ofertado (R$)</label>
+        <input type="number" id="precoInput" step="0.01" placeholder="0.00">
+      </div>
+      
+      <button class="btn-save" onclick="salvarCotacao()">Registrar Preço</button>
     </div>
 
     <div id="tab-analise" class="container">
-        <h2>Melhores Preços</h2>
-        <button class="btn-block" style="background:var(--success)" onclick="carregarRelatorio()"> Atualizar Relatório</button>
-        
-        <div id="loader">Buscando dados no servidor...</div>
-        <div id="listaResultados" style="margin-top: 20px;"></div>
-
-        <hr style="margin-top: 40px;">
-        <h3>Gestão da Semana</h3>
-        <button class="btn-block btn-danger" onclick="limparTudo()">🗑️ Limpar Cotações da Semana</button>
+      <h2>Comparativo de Preços</h2>
+      <button class="btn-save" style="background: var(--success); color: white;" onclick="carregarRelatorio()">Atualizar Lista</button>
+      <div id="loader">Carregando dados...</div>
+      <div id="listaResultados" style="margin-top: 20px;"></div>
     </div>
 
-    <footer>
-        <p>Desenvolvido por <a href="https://willappsoficial-glitch.github.io/gfarma/" target="_blank">Williano Costa</a></p>
-        <p>Suporte: willianocosta.cover@gmail.com</p>
-        <p>&copy; 2025 WillWeb Soluções Tecnológicas</p>
-    </footer>
-
-    <nav>
-        <button onclick="showTab('tab-cadastro')" class="active">📝 Cadastros</button>
-        <button onclick="showTab('tab-lancar')">💲 Lançar</button>
-        <button onclick="showTab('tab-analise')">🏆 Resultado</button>
-    </nav>
-
-    <script src="script.js"></script>
-</body>
+    <?!= include('JS'); ?>
+  </body>
 </html>
