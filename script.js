@@ -126,3 +126,35 @@ async function limparTudo() {
         }
     }
 }
+// --- NOVA FUNÇÃO: GERAR LISTA PARA WHATSAPP ---
+async function gerarTextoCotacao() {
+    const btn = event.target;
+    const textoOriginal = btn.innerText;
+    btn.innerText = "Gerando lista...";
+    btn.disabled = true;
+
+    // 1. Busca os produtos no banco
+    const res = await apiCall('getDados');
+    
+    if(res && res.produtos && res.produtos.length > 0) {
+        // 2. Monta o texto
+        let msg = "*Olá! Segue a lista para cotação desta semana:*\n\n";
+        
+        // Adiciona cada produto na lista
+        res.produtos.forEach(prod => {
+            msg += `[ ] ${prod}\n`;
+        });
+
+        msg += "\n*Fico no aguardo dos valores.*";
+
+        // 3. Abre o WhatsApp (sem número específico, para o usuário escolher o contato)
+        // Usa encodeURIComponent para transformar quebras de linha em código de URL
+        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    } else {
+        alert("Nenhum produto cadastrado para gerar a lista.");
+    }
+
+    btn.innerText = textoOriginal;
+    btn.disabled = false;
+}
+
