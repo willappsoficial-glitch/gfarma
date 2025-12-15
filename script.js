@@ -1,6 +1,6 @@
 // ARQUIVO: script.js
 // --- CONFIGURAÇÃO ---
-const API_URL = "COLE_AQUI_A_SUA_URL_DO_WEB_APP_APPSCRIPT";
+const API_URL = "https://script.google.com/macros/s/AKfycbzfHTTirqSnT7iZvJzKOw2n8Jwd6Z0q0QEp9s_HM0xcfI23SGIBU-aO_BCQxeYVc5KJiA/exec";
 
 // Inicialização: Verifica se veio de um link de e-mail
 window.onload = function() {
