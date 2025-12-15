@@ -8,18 +8,15 @@ window.onload = function() {
     const tab = params.get('tab');
     const fornecedor = params.get('fornecedor');
 
-    // Carrega os dropdowns iniciais
     carregarDropdowns();
 
-    // Se tiver parâmetros na URL, redireciona
     if (tab === 'historico') {
         showTab('tab-historico');
         if (fornecedor) {
-            // Espera um pouco para o dropdown carregar e seleciona o fornecedor
             setTimeout(() => {
                 const select = document.getElementById('filtroFornecedor');
                 select.value = fornecedor;
-                carregarHistorico(); // Já carrega os dados filtrados
+                carregarHistorico(); 
             }, 1000);
         }
     }
@@ -32,7 +29,6 @@ function showTab(tabId) {
     
     document.getElementById(tabId).classList.add('active');
     
-    // Tenta encontrar o botão correspondente para ativar
     const btn = document.querySelector(`button[onclick="showTab('${tabId}')"]`);
     if(btn) btn.classList.add('active');
 }
@@ -59,7 +55,7 @@ async function carregarDropdowns() {
     const selProdLink = document.getElementById('selProdLink');
     const selForn = document.getElementById('selectFornecedor');
     const selFornLink = document.getElementById('selFornLink');
-    const selFiltro = document.getElementById('filtroFornecedor'); // Novo filtro
+    const selFiltro = document.getElementById('filtroFornecedor'); 
     
     if(data.produtos?.length > 0) {
       if(selProd) selProd.innerHTML = data.produtos.map(p => `<option value="${p.nome}">${p.nome}</option>`).join('');
@@ -69,13 +65,10 @@ async function carregarDropdowns() {
       const opts = data.fornecedores.map(f => `<option value="${f}">${f}</option>`).join('');
       if(selForn) selForn.innerHTML = opts;
       if(selFornLink) selFornLink.innerHTML = opts;
-      
-      // Adiciona opção "Todos" no filtro de histórico
       if(selFiltro) selFiltro.innerHTML = '<option value="">Todos os Fornecedores</option>' + opts;
     }
 }
 
-// ... (salvarProduto, salvarFornecedor, salvarCotacao mantidos iguais) ...
 async function salvarProduto() {
   const nome = document.getElementById('prodNome').value;
   const unidade = document.getElementById('prodUnidade').value;
@@ -110,13 +103,11 @@ async function carregarRelatorio() {
     document.getElementById('listaResultados').innerHTML = html;
 }
 
-// NOVA FUNÇÃO: Carregar Histórico
 async function carregarHistorico() {
     const fornecedor = document.getElementById('filtroFornecedor').value;
     const divLista = document.getElementById('listaHistorico');
     divLista.innerHTML = '<p style="text-align:center">Carregando...</p>';
     
-    // Chama o backend passando o filtro (se houver)
     const url = fornecedor ? `getHistorico&fornecedor=${encodeURIComponent(fornecedor)}` : `getHistorico`;
     const data = await getData(url);
     
