@@ -1,109 +1,40 @@
-<style>
-  :root {
-    --primary-yellow: #FFD700; /* Amarelo da Logo */
-    --primary-black: #111;     /* Preto da Logo */
-    --accent-white: #fff;
-    --gray-light: #f4f4f4;
-    --success: #28a745;
-  }
+:root {
+  --primary-yellow: #FFD700;
+  --primary-black: #111;
+  --accent-white: #fff;
+  --gray-light: #f4f4f4;
+  --success: #28a745;
+}
+body { font-family: 'Roboto', sans-serif; background-color: var(--gray-light); margin: 0; padding: 0; color: var(--primary-black); }
 
-  body {
-    font-family: 'Roboto', sans-serif;
-    background-color: var(--gray-light);
-    margin: 0;
-    padding: 0;
-    color: var(--primary-black);
-  }
+/* CABEÇALHO E LOGO */
+header { background-color: var(--primary-yellow); color: var(--primary-black); padding: 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+header h1 { margin: 0; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
 
-  /* Cabeçalho */
-  header {
-    background-color: var(--primary-yellow);
-    color: var(--primary-black);
-    padding: 20px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  header h1 { margin: 0; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
-  header p { margin: 5px 0 0; font-size: 0.9rem; opacity: 0.8; }
+/* Estilo do Logo */
+.logo {
+    display: block;      /* Faz a imagem ocupar uma linha própria */
+    margin: 0 auto 10px; /* Centraliza horizontalmente e dá margem embaixo */
+    max-width: 120px;    /* Tamanho máximo para não ficar gigante */
+    height: auto;        /* Mantém a proporção */
+}
 
-  /* Navegação */
-  nav {
-    display: flex;
-    justify-content: center;
-    background: var(--primary-black);
-    padding: 10px 0;
-  }
-  
-  nav button {
-    background: none;
-    border: none;
-    color: var(--accent-white);
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    transition: 0.3s;
-  }
-  
-  nav button.active {
-    color: var(--primary-yellow);
-    border-bottom: 3px solid var(--primary-yellow);
-    font-weight: bold;
-  }
-
-  /* Conteúdo Principal */
-  .container {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background: var(--accent-white);
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    display: none; 
-  }
-  
-  .container.active { display: block; }
-
-  /* Formulários */
-  .form-group { margin-bottom: 15px; }
-  label { display: block; margin-bottom: 5px; font-weight: bold; }
-  input, select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
-  
-  button.btn-save {
-    width: 100%;
-    padding: 12px;
-    background-color: var(--primary-black);
-    color: var(--primary-yellow);
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    cursor: pointer;
-    text-transform: uppercase;
-  }
-  
-  button.btn-save:hover { background-color: #333; }
-
-  /* Cards de Resultado */
-  .card {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    padding: 15px;
-    margin-bottom: 10px;
-    background: #fff;
-    border-left: 5px solid var(--primary-yellow);
-  }
-  
-  .card h3 { margin: 0 0 5px; color: var(--primary-black); }
-  .best-price { color: var(--success); font-weight: bold; font-size: 1.2rem; }
-  .supplier-tag { font-size: 0.9rem; color: #555; }
-
-  /* Loading */
-  #loader { text-align: center; display: none; margin-top: 10px; }
-</style>
+/* NAVEGAÇÃO E RESTO DO SITE */
+nav { display: flex; justify-content: center; background: var(--primary-black); padding: 10px 0; flex-wrap: wrap; }
+nav button { background: none; border: none; color: var(--accent-white); padding: 10px 20px; font-size: 1rem; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.3s; }
+nav button.active { color: var(--primary-yellow); border-bottom: 3px solid var(--primary-yellow); font-weight: bold; }
+.container { max-width: 600px; margin: 20px auto; padding: 20px; background: var(--accent-white); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none; }
+.container.active { display: block; }
+.form-group { margin-bottom: 15px; }
+label { display: block; margin-bottom: 5px; font-weight: bold; }
+input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+button.btn-save { width: 100%; padding: 12px; background-color: var(--primary-black); color: var(--primary-yellow); border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
+button.btn-save:hover { background-color: #333; }
+.card { border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin-bottom: 10px; background: #fff; border-left: 5px solid var(--primary-yellow); }
+.card h3 { margin: 0 0 5px; color: var(--primary-black); }
+.best-price { color: var(--success); font-weight: bold; font-size: 1.2rem; }
+.supplier-tag { font-size: 0.9rem; color: #555; }
+#loader { text-align: center; display: none; margin-top: 10px; }
+.item-row { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.prod-name { font-weight: bold; font-size: 1.1rem; }
+.info-box { background: #fff3cd; padding: 10px; border-radius: 4px; margin-bottom: 20px; font-size: 0.9rem; text-align: center; }
