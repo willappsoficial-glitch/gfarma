@@ -1,40 +1,157 @@
 :root {
-  --primary-yellow: #FFD700;
-  --primary-black: #111;
-  --accent-white: #fff;
-  --gray-light: #f4f4f4;
-  --success: #28a745;
-}
-body { font-family: 'Roboto', sans-serif; background-color: var(--gray-light); margin: 0; padding: 0; color: var(--primary-black); }
-
-/* CABEÇALHO E LOGO */
-header { background-color: var(--primary-yellow); color: var(--primary-black); padding: 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-header h1 { margin: 0; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
-
-/* Estilo do Logo */
-.logo {
-    display: block;      /* Faz a imagem ocupar uma linha própria */
-    margin: 0 auto 10px; /* Centraliza horizontalmente e dá margem embaixo */
-    max-width: 120px;    /* Tamanho máximo para não ficar gigante */
-    height: auto;        /* Mantém a proporção */
+    --primary-yellow: #FFD700;
+    --primary-black: #111;
+    --accent-white: #fff;
+    --gray-light: #f4f4f4;
+    --success: #28a745;
+    --danger: #dc3545;
+    --whatsapp: #25D366;
 }
 
-/* NAVEGAÇÃO E RESTO DO SITE */
-nav { display: flex; justify-content: center; background: var(--primary-black); padding: 10px 0; flex-wrap: wrap; }
-nav button { background: none; border: none; color: var(--accent-white); padding: 10px 20px; font-size: 1rem; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.3s; }
-nav button.active { color: var(--primary-yellow); border-bottom: 3px solid var(--primary-yellow); font-weight: bold; }
-.container { max-width: 600px; margin: 20px auto; padding: 20px; background: var(--accent-white); border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none; }
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--gray-light);
+    margin: 0;
+    padding: 0;
+    padding-bottom: 100px; /* Espaço para o footer e nav */
+    color: var(--primary-black);
+}
+
+header {
+    background-color: var(--primary-yellow);
+    color: var(--primary-black);
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+header h1 { margin: 0; font-size: 1.5rem; text-transform: uppercase; }
+header p { margin: 5px 0 0; font-size: 0.9rem; opacity: 0.8; }
+
+/* NAVEGAÇÃO RESPONSIVA */
+nav {
+    background: var(--primary-black);
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav button {
+    background: none;
+    border: none;
+    color: var(--accent-white);
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border-bottom: 3px solid transparent;
+    transition: 0.3s;
+}
+
+nav button.active {
+    color: var(--primary-yellow);
+    border-bottom: 3px solid var(--primary-yellow);
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        justify-content: space-around;
+        padding: 15px 0;
+        z-index: 1000;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.2);
+    }
+    nav button {
+        font-size: 0.85rem;
+        padding: 5px;
+        border-bottom: none;
+    }
+    nav button.active {
+        color: var(--primary-yellow);
+        border-bottom: none;
+    }
+}
+
+/* LAYOUT */
+.container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: var(--accent-white);
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    display: none;
+}
 .container.active { display: block; }
+
 .form-group { margin-bottom: 15px; }
 label { display: block; margin-bottom: 5px; font-weight: bold; }
-input, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-button.btn-save { width: 100%; padding: 12px; background-color: var(--primary-black); color: var(--primary-yellow); border: none; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-button.btn-save:hover { background-color: #333; }
-.card { border: 1px solid #ddd; border-radius: 5px; padding: 15px; margin-bottom: 10px; background: #fff; border-left: 5px solid var(--primary-yellow); }
-.card h3 { margin: 0 0 5px; color: var(--primary-black); }
-.best-price { color: var(--success); font-weight: bold; font-size: 1.2rem; }
-.supplier-tag { font-size: 0.9rem; color: #555; }
-#loader { text-align: center; display: none; margin-top: 10px; }
-.item-row { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-.prod-name { font-weight: bold; font-size: 1.1rem; }
-.info-box { background: #fff3cd; padding: 10px; border-radius: 4px; margin-bottom: 20px; font-size: 0.9rem; text-align: center; }
+
+input, select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+button.btn-block {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: white;
+    margin-top: 10px;
+    font-size: 1rem;
+}
+
+.btn-primary { background-color: var(--primary-black); color: var(--primary-yellow); }
+.btn-danger { background-color: var(--danger); font-size: 0.8rem; }
+
+.btn-whatsapp { 
+    background-color: var(--whatsapp); 
+    display: block; 
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    padding: 12px;
+    border-radius: 4px;
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/* CARDS */
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: #fff;
+    border-left: 6px solid var(--primary-yellow);
+}
+.card h3 { margin: 0; color: var(--primary-black); }
+.price-row { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.best-price { color: var(--primary-black); font-weight: bold; font-size: 1.4rem; }
+.savings-badge {
+    background-color: #d4edda; color: #155724; padding: 4px 8px;
+    border-radius: 12px; font-size: 0.8rem; font-weight: bold;
+}
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 0.8rem;
+    color: #666;
+    margin-top: 20px;
+}
+footer a { color: var(--primary-black); text-decoration: none; font-weight: bold; }
+
+#loader { text-align: center; display: none; margin-top: 20px; }
