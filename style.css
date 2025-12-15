@@ -114,6 +114,12 @@ button.btn-block {
 
 .btn-primary { background-color: var(--primary-black); color: var(--primary-yellow); }
 .btn-danger { background-color: var(--danger); font-size: 0.8rem; }
+/* Adicione logo abaixo das outras classes de botão (.btn-primary, etc) */
+
+.btn-info { 
+    background-color: #17a2b8; 
+    color: white; 
+}
 
 .btn-whatsapp { 
     background-color: var(--whatsapp); 
@@ -155,3 +161,4 @@ footer {
 footer a { color: var(--primary-black); text-decoration: none; font-weight: bold; }
 
 #loader { text-align: center; display: none; margin-top: 20px; }
+
