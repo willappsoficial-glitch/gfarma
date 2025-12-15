@@ -6,8 +6,20 @@
   --success: #28a745;
 }
 body { font-family: 'Roboto', sans-serif; background-color: var(--gray-light); margin: 0; padding: 0; color: var(--primary-black); }
+
+/* CABEÇALHO E LOGO */
 header { background-color: var(--primary-yellow); color: var(--primary-black); padding: 20px; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 header h1 { margin: 0; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
+
+/* Estilo do Logo */
+.logo {
+    display: block;      /* Faz a imagem ocupar uma linha própria */
+    margin: 0 auto 10px; /* Centraliza horizontalmente e dá margem embaixo */
+    max-width: 120px;    /* Tamanho máximo para não ficar gigante */
+    height: auto;        /* Mantém a proporção */
+}
+
+/* NAVEGAÇÃO E RESTO DO SITE */
 nav { display: flex; justify-content: center; background: var(--primary-black); padding: 10px 0; flex-wrap: wrap; }
 nav button { background: none; border: none; color: var(--accent-white); padding: 10px 20px; font-size: 1rem; cursor: pointer; border-bottom: 3px solid transparent; transition: 0.3s; }
 nav button.active { color: var(--primary-yellow); border-bottom: 3px solid var(--primary-yellow); font-weight: bold; }
@@ -23,7 +35,6 @@ button.btn-save:hover { background-color: #333; }
 .best-price { color: var(--success); font-weight: bold; font-size: 1.2rem; }
 .supplier-tag { font-size: 0.9rem; color: #555; }
 #loader { text-align: center; display: none; margin-top: 10px; }
-/* Estilo Específico para página do Fornecedor */
 .item-row { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 .prod-name { font-weight: bold; font-size: 1.1rem; }
 .info-box { background: #fff3cd; padding: 10px; border-radius: 4px; margin-bottom: 20px; font-size: 0.9rem; text-align: center; }
