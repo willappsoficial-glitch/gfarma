@@ -38,3 +38,49 @@ button.btn-save:hover { background-color: #333; }
 .item-row { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
 .prod-name { font-weight: bold; font-size: 1.1rem; }
 .info-box { background: #fff3cd; padding: 10px; border-radius: 4px; margin-bottom: 20px; font-size: 0.9rem; text-align: center; }
+/* --- ESTILO DAS LISTAS DE CADASTRO --- */
+.lista-visualizacao {
+    margin-top: 15px;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #eee;
+}
+
+.lista-visualizacao h3 {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 0;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.lista-itens {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 150px; /* Altura máxima com rolagem */
+    overflow-y: auto;
+    border-top: 1px solid #ddd;
+}
+
+.lista-itens li {
+    padding: 8px 5px;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+    color: #333;
+    display: flex;
+    justify-content: space-between;
+}
+
+.lista-itens li:nth-child(even) {
+    background-color: #fff;
+}
+
+.lista-itens li span.detalhe {
+    font-size: 0.8rem;
+    color: #888;
+    background: #eee;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
