@@ -37,7 +37,16 @@
         </select>
       </div>
       <button class="btn-save" onclick="salvarProduto()">Salvar Produto</button>
+      
+      <div class="lista-visualizacao">
+          <h3>Produtos Atuais:</h3>
+          <ul id="viewListaProdutos" class="lista-itens">
+              <li>Carregando...</li>
+          </ul>
+      </div>
+
       <hr style="margin: 30px 0; border-top: 1px dashed #ccc;">
+      
       <h2>Cadastrar Fornecedor</h2>
       <div class="form-group">
         <label>Nome da Empresa</label>
@@ -48,6 +57,13 @@
         <input type="text" id="fornContato">
       </div>
       <button class="btn-save" onclick="salvarFornecedor()">Salvar Fornecedor</button>
+
+      <div class="lista-visualizacao">
+          <h3>Fornecedores Atuais:</h3>
+          <ul id="viewListaFornecedores" class="lista-itens">
+              <li>Carregando...</li>
+          </ul>
+      </div>
     </div>
 
     <div id="tab-lancar" class="container">
