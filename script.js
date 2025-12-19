@@ -51,45 +51,110 @@ async function getData(action) {
 // Funções do Sistema
 async function carregarDropdowns() {
     const data = await getData('getDadosCadastrados');
+    
+    // Elementos de Dropdown (Selects)
     const selProd = document.getElementById('selectProduto');
     const selProdLink = document.getElementById('selProdLink');
     const selForn = document.getElementById('selectFornecedor');
     const selFornLink = document.getElementById('selFornLink');
     const selFiltro = document.getElementById('filtroFornecedor'); 
     
+    // Elementos de Lista Visual (Novos)
+    const listProdView = document.getElementById('viewListaProdutos');
+    const listFornView = document.getElementById('viewListaFornecedores');
+    
+    // --- PREENCHER PRODUTOS ---
     if(data.produtos?.length > 0) {
+      // Preenche Selects
       if(selProd) selProd.innerHTML = data.produtos.map(p => `<option value="${p.nome}">${p.nome}</option>`).join('');
       if(selProdLink) selProdLink.innerHTML = data.produtos.map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+      
+      // Preenche Lista Visual
+      if(listProdView) {
+          listProdView.innerHTML = data.produtos.map(p => 
+              `<li>
+                  <strong>${p.nome}</strong> 
+                  <span class="detalhe">${p.unidade || '-'}</span>
+               </li>`
+          ).join('');
+      }
+    } else {
+        if(listProdView) listProdView.innerHTML = '<li>Nenhum produto cadastrado.</li>';
     }
+
+    // --- PREENCHER FORNECEDORES ---
     if(data.fornecedores?.length > 0) {
+      // Preenche Selects
       const opts = data.fornecedores.map(f => `<option value="${f}">${f}</option>`).join('');
+      
       if(selForn) selForn.innerHTML = opts;
       if(selFornLink) selFornLink.innerHTML = opts;
       if(selFiltro) selFiltro.innerHTML = '<option value="">Todos os Fornecedores</option>' + opts;
+
+      // Preenche Lista Visual
+      if(listFornView) {
+          listFornView.innerHTML = data.fornecedores.map(f => 
+              `<li>${f}</li>`
+          ).join('');
+      }
+    } else {
+        if(listFornView) listFornView.innerHTML = '<li>Nenhum fornecedor cadastrado.</li>';
     }
 }
+
+// --- FUNÇÕES DE SALVAR CORRIGIDAS ---
 
 async function salvarProduto() {
   const nome = document.getElementById('prodNome').value;
   const unidade = document.getElementById('prodUnidade').value;
+  
+  if(!nome) return alert("Preencha o nome do produto!");
+
   const res = await sendData('salvarProduto', { nome, unidade });
-  if(res.status === 'success') { alert(res.message); document.getElementById('prodNome').value = ''; }
+  
+  // 1. Mostra a mensagem sempre (seja Sucesso ou Erro)
+  alert(res.message); 
+
+  // 2. Só limpa se for sucesso
+  if(res.status === 'success') { 
+      document.getElementById('prodNome').value = ''; 
+      document.getElementById('prodUnidade').value = '';
+      carregarDropdowns(); // Atualiza a lista visual na hora
+  }
 }
 
 async function salvarFornecedor() {
   const nome = document.getElementById('fornNome').value;
   const contato = document.getElementById('fornContato').value;
+  
+  if(!nome) return alert("Preencha o nome do fornecedor!");
+
   const res = await sendData('salvarFornecedor', { nome, contato });
-  if(res.status === 'success') { alert(res.message); document.getElementById('fornNome').value = ''; }
+  
+  alert(res.message);
+
+  if(res.status === 'success') { 
+      document.getElementById('fornNome').value = ''; 
+      document.getElementById('fornContato').value = '';
+      carregarDropdowns(); // Atualiza a lista visual na hora
+  }
 }
 
 async function salvarCotacao() {
   const produto = document.getElementById('selectProduto').value;
   const fornecedor = document.getElementById('selectFornecedor').value;
   const preco = document.getElementById('precoInput').value;
+  
   const res = await sendData('salvarCotacao', { produto, fornecedor, preco });
-  if(res.status === 'success') { alert(res.message); document.getElementById('precoInput').value = ''; }
+  
+  alert(res.message);
+  
+  if(res.status === 'success') { 
+      document.getElementById('precoInput').value = ''; 
+  }
 }
+
+// --- FIM DAS CORREÇÕES ---
 
 async function carregarRelatorio() {
     document.getElementById('loader').style.display = 'block';
